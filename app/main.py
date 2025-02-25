@@ -16,7 +16,7 @@ def main():
     sys.stdout.write("$ ")
     command = input()
     print(f'{command}: command not found')
-    sys.exit(0)
+    sys.exit()
 
 
 if __name__ == "__main__":
