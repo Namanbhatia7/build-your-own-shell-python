@@ -8,7 +8,10 @@ def execute_repl():
         if command == "exit 0":
             sys.exit(0)  # Exit with status code 0
 
-        print(f'{command}: command not found') # throw invalid command
+        if command == 'echo':
+            print(command)
+        else:
+            print(f'{command}: command not found') # throw invalid command
 
 def main():
     # Uncomment this block to pass the first stage
