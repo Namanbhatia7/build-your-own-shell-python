@@ -3,12 +3,12 @@ import sys
 def execute_repl():
     while True:
         sys.stdout.write("$ ")
-        command = input()
+        command = input().strip()
 
         if command == "exit 0":
             sys.exit(0)  # Exit with status code 0
 
-        if command == 'echo':
+        if command == "echo":
             print(command)
         else:
             print(f'{command}: command not found') # throw invalid command
