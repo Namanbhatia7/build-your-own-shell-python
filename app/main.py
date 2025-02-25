@@ -1,17 +1,22 @@
 import sys
 
-
-def main():
-    # Uncomment this block to pass the first stage
-    # sys.stdout.write("$ ")
-
-    # Wait for user input
-
+def execute_repl():
     while True:
         sys.stdout.write("$ ")
         command = input()
         print(f'{command}: command not found') # throw invalid command
 
+
+def main():
+    # Uncomment this block to pass the first stage
+    # sys.stdout.write("$ ")
+
+    # execute_repl()
+
+    sys.stdout.write("$ ")
+    command = input()
+    print(f'{command}: command not found')
+    sys.exit(0)
 
 
 if __name__ == "__main__":
