@@ -1,5 +1,7 @@
 import sys
 
+from app.service.command_handler import Shell
+
 def execute_repl():
     while True:
         sys.stdout.write("$ ")
@@ -17,8 +19,8 @@ def execute_repl():
 def main():
     # Uncomment this block to pass the first stage
     # sys.stdout.write("$ ")
-
-    execute_repl()
+    shell_executor = Shell()
+    shell_executor.start()
 
 
 if __name__ == "__main__":
