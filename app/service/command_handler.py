@@ -14,8 +14,13 @@ class Shell:
         }
 
     def handle_type(self, args):
-        does_command_exist = lambda: args in self.commands.keys()
-        input_command = " ".join(args)
+        """Checks if a command is a built-in shell command."""
+        if not args:
+            print("Usage: type <command>")
+            return
+
+        input_command = args[0]  # Extract the command name
+        does_command_exist = input_command in self.commands  # Check existence
 
         if does_command_exist:
             print(f"{input_command} is a shell builtin")
