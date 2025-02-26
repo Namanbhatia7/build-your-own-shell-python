@@ -15,11 +15,12 @@ class Shell:
 
     def handle_type(self, args):
         does_command_exist = lambda: args in self.commands.keys()
+        input_command = " ".join(args)
 
         if does_command_exist:
-            print(f"{args} is a shell builtin")
+            print(f"{input_command} is a shell builtin")
         else:
-            print(f"{args}: not found")
+            print(f"{input_command}: not found")
 
     def handle_exit(self, args):
         """Exit the shell."""
