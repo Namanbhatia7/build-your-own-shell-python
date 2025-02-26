@@ -50,7 +50,9 @@ class Shell:
         if command in self.commands:
             self.commands[command](args)
         else:
-            self.execute_external_command(command, args)
+            #TODO: Commenting
+            # self.execute_external_command(command, args)
+            ...
 
     def start(self):
         """Starts the REPL loop."""
