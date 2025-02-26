@@ -10,9 +10,6 @@ class Shell:
             "exit": self.handle_exit,
             "echo": self.handle_echo,
             "type": self.handle_type,
-            "pwd": self.handle_pwd,
-            "ls": self.handle_ls,
-            "cd": self.handle_cd,
             "history": self.handle_history,
         }
 
