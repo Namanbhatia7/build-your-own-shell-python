@@ -30,7 +30,6 @@ class Shell:
     def handle_exit(self, args):
         """Exit the shell."""
         exit_code = int(args[0]) if args and args[0].isdigit() else 0
-        print(f"Exiting with code {exit_code}...")
         sys.exit(exit_code)
 
     def handle_echo(self, args):
