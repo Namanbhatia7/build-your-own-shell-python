@@ -9,11 +9,20 @@ class Shell:
         self.commands = {
             "exit": self.handle_exit,
             "echo": self.handle_echo,
+            "type": self.handle_type,
             "pwd": self.handle_pwd,
             "ls": self.handle_ls,
             "cd": self.handle_cd,
             "history": self.handle_history,
         }
+
+    def handle_type(self, args):
+        does_command_exist = lambda: args in self.commands.keys()
+
+        if does_command_exist:
+            print(f"{args} is a shell builtin")
+        else:
+            print(f"{args}: not found")
 
     def handle_exit(self, args):
         """Exit the shell."""
