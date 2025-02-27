@@ -14,16 +14,22 @@ class Shell:
         }
 
     def handle_type(self, args):
-        """Checks if a command is a built-in shell command."""
+        """Checks if a command is a shell builtin or an executable in PATH."""
         if not args:
             print("Usage: type <command>")
             return
 
         input_command = args[0]  # Extract the command name
-        does_command_exist = input_command in self.commands  # Check existence
 
-        if does_command_exist:
+        # Check if the command is a built-in
+        if input_command in self.commands:
             print(f"{input_command} is a shell builtin")
+            return
+
+        # Check if the command exists in PATH using shutil.which()
+        command_path = shutil.which(input_command)
+        if command_path:
+            print(f"{input_command} is {command_path}")
         else:
             print(f"{input_command}: not found")
 
