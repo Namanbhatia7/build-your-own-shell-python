@@ -1,5 +1,7 @@
 [![progress-banner](https://backend.codecrafters.io/progress/shell/4bcbdcdb-b0a8-4093-ab7b-113d9b2d819b)](https://app.codecrafters.io/users/codecrafters-bot?r=2qF)
 
+This is Codecrafters Clone for building shell in Python.
+
 This is a starting point for Python solutions to the
 ["Build Your Own Shell" Challenge](https://app.codecrafters.io/courses/shell/overview).
 
