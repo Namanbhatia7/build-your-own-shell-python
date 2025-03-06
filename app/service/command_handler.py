@@ -12,7 +12,11 @@ class Shell:
             "echo": self.handle_echo,
             "type": self.handle_type,
             "history": self.handle_history,
+            "pwd": self.handle_pwd
         }
+    
+    def handle_pwd(self, args):
+        ...
 
     def handle_type(self, args):
         """Checks if a command is a shell builtin or an executable in PATH."""
