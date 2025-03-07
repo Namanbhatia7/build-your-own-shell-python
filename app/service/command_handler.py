@@ -18,6 +18,7 @@ class Shell:
     
     def handle_cd(self, args):
         input_path = "".join(args)
+        input_path = os.path.expanduser(input_path)
         if os.path.exists(input_path):
             os.chdir(input_path)
         else:
