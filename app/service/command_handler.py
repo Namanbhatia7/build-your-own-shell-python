@@ -17,6 +17,7 @@ class Shell:
         }
     
     def handle_cd(self, args):
+        print(args)
         os.chdir(args)
 
         return
