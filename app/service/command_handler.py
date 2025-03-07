@@ -17,8 +17,11 @@ class Shell:
         }
     
     def handle_cd(self, args):
-        print("".join(args))
-        os.chdir("".join(args))
+        input_path = "".join(args)
+        if os.path.exists(input_path):
+            os.chdir(input_path)
+        else:
+            print(f"cd: {input_path}: no such file or directory:")
 
         return
     
