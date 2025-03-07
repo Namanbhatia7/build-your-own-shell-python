@@ -12,8 +12,14 @@ class Shell:
             "echo": self.handle_echo,
             "type": self.handle_type,
             "history": self.handle_history,
-            "pwd": self.handle_pwd
+            "pwd": self.handle_pwd,
+            "cd": self.handle_cd,
         }
+    
+    def handle_cd(self, args):
+        os.chdir(args)
+
+        return
     
     def handle_pwd(self, args):
         """Displays current directory path"""
