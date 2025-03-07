@@ -21,7 +21,7 @@ class Shell:
         if os.path.exists(input_path):
             os.chdir(input_path)
         else:
-            print(f"cd: {input_path}: no such file or directory:")
+            print(f"cd: {input_path}: No such file or directory")
 
         return
     
