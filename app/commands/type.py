@@ -1,5 +1,5 @@
 import shutil
-from app.commands.base import BaseCommand
+from commands.base import BaseCommand
 
 class TypeCommand(BaseCommand):
     def execute(self, args):

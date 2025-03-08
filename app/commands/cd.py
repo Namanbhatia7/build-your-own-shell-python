@@ -1,5 +1,5 @@
 import os
-from app.commands.base import BaseCommand
+from commands.base import BaseCommand
 
 class CdCommand(BaseCommand):
     def execute(self, args):
