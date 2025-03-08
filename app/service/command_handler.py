@@ -106,7 +106,7 @@
 #                 print("\nExiting REPL...")
 #                 sys.exit(0)
 
-
+import shlex
 from app.commands.cd import CdCommand
 from app.commands.echo import EchoCommand
 from app.commands.exit import ExitCommand
@@ -128,7 +128,7 @@ class CommandHandler:
         self.external_executor = ExternalExecutor()
 
     def execute(self, command_line):
-        args = command_line.split()
+        args = shlex.split(command_line)
         if not args:
             return
         
