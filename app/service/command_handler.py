@@ -110,6 +110,7 @@
 from app.commands.cd import CdCommand
 from app.commands.echo import EchoCommand
 from app.commands.exit import ExitCommand
+from app.commands.type import TypeCommand
 from app.commands.pwd import PwdCommand
 from app.service.external_executor import ExternalExecutor
 
@@ -122,7 +123,7 @@ class CommandHandler:
             "echo": EchoCommand(),
             "exit": ExitCommand(),
             "pwd": PwdCommand(),
-            # "type": TypeCommand(),
+            "type": TypeCommand(),
         }
         self.external_executor = ExternalExecutor()
 
