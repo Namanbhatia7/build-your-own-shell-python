@@ -27,8 +27,8 @@
 #     main()
 
 import sys
-from app.service.command_handler import CommandHandler
-from app.service.history_manager import HistoryManager
+from service.command_handler import CommandHandler
+from service.history_manager import HistoryManager
 
 class Shell:
     """Main shell REPL loop."""

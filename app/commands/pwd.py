@@ -1,3 +1,4 @@
+import os
 from commands.base import BaseCommand
 
 class PwdCommand(BaseCommand):
