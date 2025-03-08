@@ -123,7 +123,7 @@ class CommandHandler:
             "echo": EchoCommand(),
             "exit": ExitCommand(),
             "pwd": PwdCommand(),
-            "type": TypeCommand(),
+            "type": TypeCommand(self),
         }
         self.external_executor = ExternalExecutor()
 
