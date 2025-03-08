@@ -1,5 +1,5 @@
 import sys
-from commands.base import BaseCommand
+from app.commands.base import BaseCommand
 
 class ExitCommand(BaseCommand):
     def execute(self, args):

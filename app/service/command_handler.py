@@ -107,12 +107,12 @@
 #                 sys.exit(0)
 
 
-from commands.cd import CdCommand
-from commands.echo import EchoCommand
-from commands.exit import ExitCommand
-from commands.type import TypeCommand
-from commands.pwd import PwdCommand
-from service.external_executor import ExternalExecutor
+from app.commands.cd import CdCommand
+from app.commands.echo import EchoCommand
+from app.commands.exit import ExitCommand
+from app.commands.type import TypeCommand
+from app.commands.pwd import PwdCommand
+from app.service.external_executor import ExternalExecutor
 
 class CommandHandler:
     """Handles command execution and dispatching."""
