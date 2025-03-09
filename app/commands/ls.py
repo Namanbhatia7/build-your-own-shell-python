@@ -3,7 +3,6 @@ from app.commands.base import BaseCommand
 
 class LSCommand(BaseCommand):
     def execute(self, args):
-       def execute(self, args):
         path = args[0] if args and args[0] not in [">", "1>"] else "."
 
         # Check if redirection (`>` or `1>`) is used
@@ -12,10 +11,6 @@ class LSCommand(BaseCommand):
             split_index = args.index(redirect_symbol)
             dir_path = args[:split_index]  # Directory to list
             output_file = args[split_index + 1]  # Output file
-
-            print(dir_path)
-
-            os.makedirs(os.path.dirname(output_file), exist_ok=True)  # Ensure parent dir exists
 
             try:
                 contents = "\n".join(os.listdir(dir_path[0] if dir_path else "."))
