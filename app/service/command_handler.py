@@ -141,5 +141,5 @@ class CommandHandler:
         if command in self.commands:
             self.commands[command].execute(args)
         else:
-            self.external_executor.execute(command)
+            self.external_executor.execute(command, args)
 
