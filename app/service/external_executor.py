@@ -5,7 +5,7 @@ class ExternalExecutor:
 
     def execute(self, command, args):
         try:
-            result = subprocess.run([command] + args, check=True, stdout=subprocess.PIPE, text=True, capture_output=True)
+            result = subprocess.run([command] + args, check=True, stdout=subprocess.PIPE, text=True)
             print(result.stdout, end="")
         except FileNotFoundError:
             print(f"{command}: command not found")
