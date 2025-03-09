@@ -127,7 +127,7 @@ class CommandHandler:
             "pwd": PwdCommand(),
             "type": TypeCommand(self),
             "ls": LSCommand(),
-            # "cat": CatCommand()
+            "cat": CatCommand()
         }
         self.external_executor = ExternalExecutor()
 
