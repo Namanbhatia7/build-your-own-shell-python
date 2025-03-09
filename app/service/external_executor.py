@@ -6,24 +6,25 @@ class ExternalExecutor:
 
     def execute(self, command, args):
         try:
-            # Handle commands with spaces properly
-            command = shlex.quote(command)  
+            # Check if the command contains redirection (">", ">>", "1>", etc.)
+            has_redirection = any(op in args for op in [">", ">>", "1>", "2>"])
 
-            # Convert args list to a properly formatted string
-            args_str = " ".join(shlex.quote(arg) for arg in args)
+            if has_redirection:
+                # Execute directly in the shell without shlex.join()
+                full_command = " ".join([command] + args)  # Direct join without escaping
+            else:
+                # Use shlex.join() for safe execution when no redirection
+                full_command = shlex.join([command] + args)
 
-            # Full command as string
-            full_command = f"{command} {args_str}"
-
-            # Run with shell=True so it can handle redirections
+            # Run the command in the shell
             result = subprocess.run(full_command, shell=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-            # Print stderr (errors should always be shown)
+            # Print stderr (errors should not be redirected)
             if result.stderr:
                 print(result.stderr, end="")
 
             # Print stdout only if it's not redirected
-            if result.stdout and ">" not in args:
+            if result.stdout:
                 print(result.stdout, end="")
 
         except FileNotFoundError:
