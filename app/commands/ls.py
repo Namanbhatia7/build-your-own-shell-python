@@ -3,23 +3,40 @@ from app.commands.base import BaseCommand
 
 class LSCommand(BaseCommand):
     def execute(self, args):
-        path = args[0] if args and args[0] not in [">", "1>"] else "."
+        path = "."  # Default directory
+        output_file = None  # Default to stdout
 
-        # Check if redirection (`>` or `1>`) is used
+        # Handle output redirection (`>` or `1>`)
         if ">" in args or "1>" in args:
             redirect_symbol = ">" if ">" in args else "1>"
             split_index = args.index(redirect_symbol)
-            dir_path = args[:split_index]  # Directory to list
-            output_file = args[split_index + 1]  # Output file
 
-            try:
-                contents = "\n".join(os.listdir(dir_path[0] if dir_path else "."))
-                with open(output_file, "w") as f:
-                    f.write(contents + "\n")
-            except FileNotFoundError:
-                print(f"ls: cannot access '{dir_path[0]}': No such file or directory")
+            dir_args = [arg for arg in args[:split_index] if arg != "-1"]  # Ignore `-1` flag
+            output_file = args[split_index + 1]  # Extract output file
+
+            if dir_args:
+                path = dir_args[0]  # Take first argument as directory
+
         else:
-            try:
-                print("\n".join(os.listdir(path)))
-            except FileNotFoundError:
-                print(f"ls: cannot access '{path}': No such file or directory")
+            # Ignore `-1` if present in args
+            filtered_args = [arg for arg in args if arg != "-1"]
+            if filtered_args:
+                path = filtered_args[0]  # Use directory argument if given
+
+        try:
+            # Get directory contents
+            contents = os.listdir(path)
+            contents.sort()  # Sort alphabetically like `ls`
+
+            output_text = "\n".join(contents) + "\n"
+
+            # Handle redirection or print to terminal
+            if output_file:
+                os.makedirs(os.path.dirname(output_file), exist_ok=True)  # Ensure parent dir exists
+                with open(output_file, "w") as f:
+                    f.write(output_text)
+            else:
+                print(output_text.strip())  # Avoid extra newline in terminal output
+
+        except FileNotFoundError:
+            print(f"ls: cannot access '{path}': No such file or directory")
