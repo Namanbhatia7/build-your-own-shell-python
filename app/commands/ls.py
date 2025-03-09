@@ -13,6 +13,8 @@ class LSCommand(BaseCommand):
             dir_path = args[:split_index]  # Directory to list
             output_file = args[split_index + 1]  # Output file
 
+            print(dir_path)
+
             os.makedirs(os.path.dirname(output_file), exist_ok=True)  # Ensure parent dir exists
 
             try:
