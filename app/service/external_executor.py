@@ -1,12 +1,16 @@
 import subprocess
+import shlex
 
 class ExternalExecutor:
     """Handles execution of external commands, including redirections."""
 
     def execute(self, command, args):
         try:
-            # Convert args list to space-separated string
-            args_str = " ".join(args)
+            # Handle commands with spaces properly
+            command = shlex.quote(command)  
+
+            # Convert args list to a properly formatted string
+            args_str = " ".join(shlex.quote(arg) for arg in args)
 
             # Full command as string
             full_command = f"{command} {args_str}"
@@ -19,7 +23,7 @@ class ExternalExecutor:
                 print(result.stderr, end="")
 
             # Print stdout only if it's not redirected
-            if result.stdout and ">" not in args_str:
+            if result.stdout and ">" not in args:
                 print(result.stdout, end="")
 
         except FileNotFoundError:
