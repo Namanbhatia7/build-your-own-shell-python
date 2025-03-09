@@ -6,21 +6,21 @@ class ExternalExecutor:
 
     def execute(self, command, args):
         try:
-            # Check for redirections
+            # Check if redirection exists
             has_redirection = any(op in args for op in [">", ">>", "1>", "2>"])
 
-            # Form command string
+            # Construct the command properly
             full_command = " ".join([command] + args) if has_redirection else shlex.join([command] + args)
 
-            # Run with Bash to get expected error message format
+            # Execute the command using bash for proper redirection handling
             result = subprocess.run(full_command, shell=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, executable="/bin/bash")
 
-            # Print stderr (errors should not be redirected)
+            # Print errors first (should not be redirected)
             if result.stderr:
                 print(result.stderr, end="")
 
             # Print stdout only if it's not redirected
-            if result.stdout:
+            if result.stdout and not has_redirection:
                 print(result.stdout, end="")
 
         except FileNotFoundError:
