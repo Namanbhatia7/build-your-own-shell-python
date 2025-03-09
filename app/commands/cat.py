@@ -29,7 +29,6 @@ class CatCommand(BaseCommand):
 
         else:
             for file in args:
-                print(file)
                 if os.path.exists(file):
                     with open(file, "r") as f:
                         print(f.read().strip())
