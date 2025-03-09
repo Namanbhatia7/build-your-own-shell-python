@@ -6,18 +6,14 @@ class ExternalExecutor:
 
     def execute(self, command, args):
         try:
-            # Check if the command contains redirection (">", ">>", "1>", etc.)
+            # Check for redirections
             has_redirection = any(op in args for op in [">", ">>", "1>", "2>"])
 
-            if has_redirection:
-                # Execute directly in the shell without shlex.join()
-                full_command = " ".join([command] + args)  # Direct join without escaping
-            else:
-                # Use shlex.join() for safe execution when no redirection
-                full_command = shlex.join([command] + args)
+            # Form command string
+            full_command = " ".join([command] + args) if has_redirection else shlex.join([command] + args)
 
-            # Run the command in the shell
-            result = subprocess.run(full_command, shell=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            # Run with Bash to get expected error message format
+            result = subprocess.run(full_command, shell=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, executable="/bin/bash")
 
             # Print stderr (errors should not be redirected)
             if result.stderr:
