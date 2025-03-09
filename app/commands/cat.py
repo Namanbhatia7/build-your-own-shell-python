@@ -22,15 +22,15 @@ class CatCommand(BaseCommand):
         for file in file_args:
             if os.path.exists(file):
                 with open(file, "r") as f:
-                    collected_output.append(f.read())  # No `.strip()` to retain formatting
+                    collected_output.append(f.read())  # Read file content
             else:
-                print(f"cat: {file}: No such file or directory")
-                return  # Exit early if any file is missing
+                print(f"cat: {file}: No such file or directory", file=os.sys.stderr)
 
-        result = "".join(collected_output)  # Join without extra newlines
-
-        if output_file:
-            with open(output_file, "w") as f:
-                f.write(result)
-        else:
-            print(result, end="")  # Avoid adding extra newlines
+        # Write collected output only if there's valid content
+        if collected_output:
+            result = "".join(collected_output)  # Join without extra newlines
+            if output_file:
+                with open(output_file, "w") as f:
+                    f.write(result)
+            else:
+                print(result, end="")  # Print without extra newline
