@@ -6,7 +6,7 @@ class LSCommand(BaseCommand):
         path = "."  # Default directory
         output_file = None  # Default to stdout
 
-        # Handle output redirection (`>` or `1>`)
+        # Handle redirection (`>` or `1>`)
         if ">" in args or "1>" in args:
             redirect_symbol = ">" if ">" in args else "1>"
             split_index = args.index(redirect_symbol)
@@ -24,13 +24,11 @@ class LSCommand(BaseCommand):
                 path = filtered_args[0]  # Use directory argument if given
 
         try:
-            # Get directory contents
-            contents = os.listdir(path)
-            contents.sort()  # Sort alphabetically like `ls`
+            # Get sorted directory contents (like `ls` does)
+            contents = sorted(os.listdir(path))
 
             output_text = "\n".join(contents) + "\n"
 
-            # Handle redirection or print to terminal
             if output_file:
                 os.makedirs(os.path.dirname(output_file), exist_ok=True)  # Ensure parent dir exists
                 with open(output_file, "w") as f:
