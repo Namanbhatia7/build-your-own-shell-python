@@ -1,26 +1,25 @@
 import subprocess
-import shlex
 
 class ExternalExecutor:
     """Handles execution of external commands, including redirections."""
 
     def execute(self, command, args):
         try:
-            # Check if redirection exists
-            has_redirection = any(op in args for op in [">", ">>", "1>", "2>"])
+            # Convert args list to space-separated string
+            args_str = " ".join(args)
 
-            # Construct the command properly
-            full_command = " ".join([command] + args) if has_redirection else shlex.join([command] + args)
+            # Full command as string
+            full_command = f"{command} {args_str}"
 
-            # Execute the command using bash for proper redirection handling
-            result = subprocess.run(full_command, shell=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, executable="/bin/bash")
+            # Run with shell=True so it can handle redirections
+            result = subprocess.run(full_command, shell=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-            # Print errors first (should not be redirected)
+            # Print stderr (errors should always be shown)
             if result.stderr:
                 print(result.stderr, end="")
 
             # Print stdout only if it's not redirected
-            if result.stdout and not has_redirection:
+            if result.stdout and ">" not in args_str:
                 print(result.stdout, end="")
 
         except FileNotFoundError:
