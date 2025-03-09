@@ -113,6 +113,7 @@ from app.commands.exit import ExitCommand
 from app.commands.type import TypeCommand
 from app.commands.pwd import PwdCommand
 from app.commands.ls import LSCommand
+from app.commands.cat import CatCommand
 from app.service.external_executor import ExternalExecutor
 
 class CommandHandler:
@@ -125,7 +126,8 @@ class CommandHandler:
             "exit": ExitCommand(),
             "pwd": PwdCommand(),
             "type": TypeCommand(self),
-            "ls": LSCommand()
+            "ls": LSCommand(),
+            "cat": CatCommand()
         }
         self.external_executor = ExternalExecutor()
 
