@@ -6,24 +6,26 @@ class ExternalExecutor:
 
     def execute(self, command, args):
         try:
-            # Construct a properly formatted shell command
-            full_command = shlex.join([command] + args)
-
             # Check if the command contains redirection (">", ">>", "1>", etc.)
-            if any(op in args for op in [">", ">>", "1>", "2>"]):
-                # Execute directly in the shell without capturing output
-                result = subprocess.run(full_command, shell=True)
+            has_redirection = any(op in args for op in [">", ">>", "1>", "2>"])
+
+            if has_redirection:
+                # Execute directly in the shell without shlex.join()
+                full_command = " ".join([command] + args)  # Direct join without escaping
             else:
-                # Capture stdout and stderr only when there's no redirection
-                result = subprocess.run(full_command, shell=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                # Use shlex.join() for safe execution when no redirection
+                full_command = shlex.join([command] + args)
 
-                # Print stderr (errors should not be redirected)
-                if result.stderr:
-                    print(result.stderr, end="")
+            # Run the command in the shell
+            result = subprocess.run(full_command, shell=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-                # Print stdout only if it's not redirected
-                if result.stdout:
-                    print(result.stdout, end="")
+            # Print stderr (errors should not be redirected)
+            if result.stderr:
+                print(result.stderr, end="")
+
+            # Print stdout only if it's not redirected
+            if result.stdout:
+                print(result.stdout, end="")
 
         except FileNotFoundError:
             print(f"{command}: command not found")
