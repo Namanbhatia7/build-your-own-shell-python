@@ -5,8 +5,9 @@ class LSCommand(BaseCommand):
     def execute(self, args):
         path = "."  # Default directory
         output_file = None  # Default to stdout
+        stderr_file = None  # Default to stderr
 
-        # Handle redirection (`>` or `1>`)
+        # Handle stdout (`>` or `1>`) and stderr (`2>`) redirections
         if ">" in args or "1>" in args:
             redirect_symbol = ">" if ">" in args else "1>"
             split_index = args.index(redirect_symbol)
@@ -17,24 +18,34 @@ class LSCommand(BaseCommand):
             if dir_args:
                 path = dir_args[0]  # Take first argument as directory
 
+        elif "2>" in args:
+            stderr_index = args.index("2>")
+            stderr_file = args[stderr_index + 1]  # Extract stderr file
+            path = args[0] if args and args[0] != "2>" else "."  # Take first argument as directory
+
         else:
-            # Ignore `-1` if present in args
             filtered_args = [arg for arg in args if arg != "-1"]
             if filtered_args:
-                path = filtered_args[0]  # Use directory argument if given
+                path = filtered_args[0]
 
         try:
             # Get sorted directory contents (like `ls` does)
             contents = sorted(os.listdir(path))
-
             output_text = "\n".join(contents) + "\n"
 
             if output_file:
-                os.makedirs(os.path.dirname(output_file), exist_ok=True)  # Ensure parent dir exists
+                os.makedirs(os.path.dirname(output_file), exist_ok=True)
                 with open(output_file, "w") as f:
                     f.write(output_text)
             else:
-                print(output_text.strip())  # Avoid extra newline in terminal output
+                print(output_text.strip())  # Avoid extra newline
 
         except FileNotFoundError:
-            print(f"ls: cannot access '{path}': No such file or directory")
+            error_message = f"ls: cannot access '{path}': No such file or directory\n"
+
+            if stderr_file:
+                os.makedirs(os.path.dirname(stderr_file), exist_ok=True)
+                with open(stderr_file, "w") as f:
+                    f.write(error_message)
+            else:
+                print(error_message, end="")
