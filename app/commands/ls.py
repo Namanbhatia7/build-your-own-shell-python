@@ -45,7 +45,7 @@ class LSCommand(BaseCommand):
                 print(output_text.strip())  # Avoid extra newline
 
         except FileNotFoundError:
-            error_message = f"ls: cannot access '{path}': No such file or directory\n"
+            error_message = f"ls: '{path}': No such file or directory\n"
 
             if stderr_file:
                 os.makedirs(os.path.dirname(stderr_file), exist_ok=True)
