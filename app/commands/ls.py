@@ -20,8 +20,12 @@ class LSCommand(BaseCommand):
 
         elif "2>" in args:
             stderr_index = args.index("2>")
-            stderr_file = args[stderr_index + 1]  # Extract stderr file
-            path = args[0] if args and args[0] != "2>" else "."  # Take first argument as directory
+
+            dir_args = [arg for arg in args[:split_index] if arg != "-1"]  # Ignore `-1` flag
+            stderr_file = args[split_index + 1]  # Extract output file
+
+            if dir_args:
+                path = dir_args[0]  # Take first argument as directory
 
         else:
             filtered_args = [arg for arg in args if arg != "-1"]
