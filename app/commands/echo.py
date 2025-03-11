@@ -5,12 +5,14 @@ class EchoCommand(BaseCommand):
     def redirect(self, args):
         if "2>" in args:
             redirect_symbol = "2>"
+            split_index = args.index(redirect_symbol)
+            output_file = args[split_index + 1]
+            content = ""  # Since `echo` has no error output, writing an empty string
         else:
             redirect_symbol = ">" if ">" in args else "1>"
-
-        split_index = args.index(redirect_symbol)
-        content = " ".join(args[:split_index])  # Content to echo
-        output_file = args[split_index + 1]  # Filename
+            split_index = args.index(redirect_symbol)
+            output_file = args[split_index + 1]
+            content = " ".join(args[:split_index])
 
         # Write content to the file
         with open(output_file, "w") as f:
