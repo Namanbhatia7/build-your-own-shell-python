@@ -8,6 +8,7 @@ class EchoCommand(BaseCommand):
             split_index = args.index(redirect_symbol)
             output_file = args[split_index + 1]
             content = ""  # Since `echo` has no error output, writing an empty string
+            print(" ".join(args[:split_index]))
         else:
             redirect_symbol = ">" if ">" in args else "1>"
             split_index = args.index(redirect_symbol)
