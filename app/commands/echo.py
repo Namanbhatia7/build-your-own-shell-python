@@ -14,9 +14,9 @@ class EchoCommand(BaseCommand):
             output_file = args[split_index + 1]
             content = " ".join(args[:split_index])
 
-        # Write content to the file
         with open(output_file, "w") as f:
-            f.write(content + "\n")
+            if content:
+                f.write(content + "\n")
 
     def execute(self, args):
         if ">" in args or "1>" in args or "2>" in args:
