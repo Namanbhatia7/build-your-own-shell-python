@@ -32,7 +32,7 @@ class EchoCommand(BaseCommand):
         return redirections, content
 
     def redirect(self, args):
-        redirections, content = {symbol: None for symbol in self.REDIRECT_SYMBOLS}
+        redirections, content = self.parse_arguments(args)
         content_str = " ".join(content)
 
         # Print only if no stdout redirection
