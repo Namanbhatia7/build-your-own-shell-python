@@ -3,7 +3,7 @@ from app.commands.base import BaseCommand
 
 class EchoCommand(BaseCommand):
     def redirect(self, args):
-        redirect_symbols = [">", "1>", "2>"]
+        redirect_symbols = [">", "1>", "2>", ">>", "1>>"]
         redirections = {symbol: None for symbol in redirect_symbols}
         content = []
 
