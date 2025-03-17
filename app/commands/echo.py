@@ -2,9 +2,9 @@ import shlex
 from app.commands.base import BaseCommand
 
 class EchoCommand(BaseCommand):
+    REDIRECT_SYMBOLS = [">", "1>", "2>", ">>", "1>>"]
     def redirect(self, args):
-        redirect_symbols = [">", "1>", "2>", ">>", "1>>"]
-        redirections = {symbol: None for symbol in redirect_symbols}
+        redirections = {symbol: None for symbol in self.REDIRECT_SYMBOLS}
         content = []
 
         # Identify redirections and extract target files
@@ -36,7 +36,7 @@ class EchoCommand(BaseCommand):
             self.write_to_file(redirections["2>"], "", mode="w", empty_ok=True)
 
     def execute(self, args):
-        if any(symbol in args for symbol in [">", "1>", "2>", ">>", "1>>"]):
+        if any(symbol in args for symbol in self.REDIRECT_SYMBOLS):
             self.redirect(args)
         else:
             print(" ".join(args))
