@@ -7,8 +7,9 @@ class ExternalExecutor:
     def execute(self, command, args):
         try:
             has_redirection = any(op in args for op in [">", ">>", "1>", "2>"])
+            has_append_std = any(op in args for op in [">>", "1>>"])
 
-            if has_redirection:
+            if has_redirection or has_append_std:
                 full_command = " ".join([command] + args)
             else:
                 full_command = shlex.join([command] + args)
