@@ -18,26 +18,31 @@ class EchoCommand(BaseCommand):
         content_str = " ".join(content)
 
         # Print only if no stdout redirection
-        if not redirections[">"] and not redirections["1>"]:
+        if not any(redirections[symbol] for symbol in [">", "1>", ">>", "1>>"]):
             print(content_str)
 
-        # Write to output file (stdout)
-        output_file = redirections[">"] or redirections["1>"]
-        if output_file:
-            self.write_to_file(output_file, content_str)
+        # Handle output redirection (overwrite mode)
+        if redirections[">"] or redirections["1>"]:
+            output_file = redirections[">"] or redirections["1>"]
+            self.write_to_file(output_file, content_str, mode="w")
 
-        # Handle error redirection (stderr)
+        # Handle output redirection (append mode)
+        if redirections[">>"] or redirections["1>>"]:
+            append_file = redirections[">>"] or redirections["1>>"]
+            self.write_to_file(append_file, content_str, mode="a")
+
+        # Handle error redirection (stderr overwrite mode)
         if redirections["2>"]:
-            self.write_to_file(redirections["2>"], "", empty_ok=True)
+            self.write_to_file(redirections["2>"], "", mode="w", empty_ok=True)
 
     def execute(self, args):
-        if any(symbol in args for symbol in [">", "1>", "2>"]):
+        if any(symbol in args for symbol in [">", "1>", "2>", ">>", "1>>"]):
             self.redirect(args)
         else:
             print(" ".join(args))
 
-    def write_to_file(self, file_path, content, empty_ok=False):
+    def write_to_file(self, file_path, content, mode="w", empty_ok=False):
         """Writes content to a file, ensuring parent directories exist."""
         if content or empty_ok:
-            with open(file_path, "w") as f:
+            with open(file_path, mode) as f:
                 f.write(content + ("\n" if content else ""))
