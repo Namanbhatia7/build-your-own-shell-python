@@ -5,7 +5,7 @@ class EchoCommand(BaseCommand):
     REDIRECT_SYMBOLS = [">", "1>", "2>", ">>", "1>>"]
 
     def has_stdout_redirection(self, redirections):
-        return any(redirections[symbol] for symbol in self.REDIRECT_SYMBOLS)
+        return any(redirections[symbol] for symbol in self.REDIRECT_SYMBOLS if symbol != "2>")
     
     def handle_redirections(self, redirections, content_str):
         if redirections[">"] or redirections["1>"]:
