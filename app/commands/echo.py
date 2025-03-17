@@ -3,46 +3,52 @@ from app.commands.base import BaseCommand
 
 class EchoCommand(BaseCommand):
     REDIRECT_SYMBOLS = [">", "1>", "2>", ">>", "1>>"]
-    def redirect(self, args):
-        redirections = {symbol: None for symbol in self.REDIRECT_SYMBOLS}
-        content = []
 
-        # Identify redirections and extract target files
-        for i, arg in enumerate(args):
-            if arg in redirections and i + 1 < len(args):
-                redirections[arg] = args[i + 1]
-                break  # Stop processing content once redirection is found
-            else:
-                content.append(arg)
-
-        content_str = " ".join(content)
-
-        # Print only if no stdout redirection
-        if not any(redirections[symbol] for symbol in [">", "1>", ">>", "1>>"]):
-            print(content_str)
-
-        # Handle output redirection (overwrite mode)
+    def has_stdout_redirection(self, redirections):
+        return any(redirections[symbol] for symbol in self.REDIRECT_SYMBOLS)
+    
+    def handle_redirections(self, redirections, content_str):
         if redirections[">"] or redirections["1>"]:
-            output_file = redirections[">"] or redirections["1>"]
-            self.write_to_file(output_file, content_str, mode="w")
+            self.write_to_file(redirections[">"] or redirections["1>"], content_str, mode="w")
 
-        # Handle output redirection (append mode)
         if redirections[">>"] or redirections["1>>"]:
-            append_file = redirections[">>"] or redirections["1>>"]
-            self.write_to_file(append_file, content_str, mode="a")
+            self.write_to_file(redirections[">>"] or redirections["1>>"], content_str, mode="a")
 
-        # Handle error redirection (stderr overwrite mode)
         if redirections["2>"]:
             self.write_to_file(redirections["2>"], "", mode="w", empty_ok=True)
 
-    def execute(self, args):
-        if any(symbol in args for symbol in self.REDIRECT_SYMBOLS):
-            self.redirect(args)
-        else:
-            print(" ".join(args))
+    def parse_arguments(self, args):
+        """Parses command arguments and returns a tuple of content and redirections."""
+        redirections = {symbol: None for symbol in self.REDIRECT_SYMBOLS}
+        content = []
+
+        for i, arg in enumerate(args):
+            if arg in redirections and i + 1 < len(args):
+                redirections[arg] = args[i + 1]
+                break
+            else:
+                content.append(arg)
+        
+        return redirections, content
+
+    def redirect(self, args):
+        redirections, content = {symbol: None for symbol in self.REDIRECT_SYMBOLS}
+        content_str = " ".join(content)
+
+        # Print only if no stdout redirection
+        if not self.has_stdout_redirection(redirections):
+            print(content_str)
+
+        self.handle_redirections(redirections, content_str)
 
     def write_to_file(self, file_path, content, mode="w", empty_ok=False):
         """Writes content to a file, ensuring parent directories exist."""
         if content or empty_ok:
             with open(file_path, mode) as f:
                 f.write(content + ("\n" if content else ""))
+    
+    def execute(self, args):
+        if any(symbol in args for symbol in self.REDIRECT_SYMBOLS):
+            self.redirect(args)
+        else:
+            print(" ".join(args))
