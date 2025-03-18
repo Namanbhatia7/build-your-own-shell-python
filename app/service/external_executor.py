@@ -1,12 +1,14 @@
 import subprocess
 import shlex
 
-class ExternalExecutor:
+from app.commands.base import BaseCommand
+
+class ExternalExecutor(BaseCommand):
     """Handles execution of external commands, including redirections."""
 
     def execute(self, command, args):
         try:
-            has_redirection = any(op in args for op in [">", ">>", "1>>", "1>", "2>"])
+            has_redirection = any(op in args for op in self.REDIRECT_SYMBOLS)
 
             if has_redirection:
                 full_command = " ".join([command] + args)

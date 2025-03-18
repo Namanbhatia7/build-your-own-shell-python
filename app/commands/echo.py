@@ -2,7 +2,6 @@ import shlex
 from app.commands.base import BaseCommand
 
 class EchoCommand(BaseCommand):
-    REDIRECT_SYMBOLS = [">", "1>", "2>", ">>", "1>>"]
 
     def has_stdout_redirection(self, redirections):
         return any(redirections[symbol] for symbol in self.REDIRECT_SYMBOLS if symbol != "2>")
