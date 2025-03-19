@@ -28,6 +28,15 @@ class LSCommand(BaseCommand):
             dir_args = [arg for arg in args[:split_index] if arg != "-1"]
             if dir_args:
                 path = dir_args[0]  # Take first argument as directory
+        
+        elif "2>>" in args:
+            stderr_index = args.index("2>>")
+            stderr_file = args[stderr_index + 1]
+            stderr_append = True
+
+            dir_args = [arg for arg in args[:stderr_index] if arg != "-1"]
+            if dir_args:
+                path = dir_args[0]
 
         elif "2>" in args:
             stderr_index = args.index("2>")
@@ -48,7 +57,12 @@ class LSCommand(BaseCommand):
             output_text = "\n".join(contents) + "\n"
 
             if output_file:
-                os.makedirs(os.path.dirname(output_file), exist_ok=True)
+                output_dir = os.path.dirname(output_file)
+                if output_dir and not os.path.exists(output_dir):
+                    error_message = f'Failed to read file ("{output_file}"): open {output_file}: no such file or directory\n'
+                    print(error_message, end="")
+                    return
+
                 mode = "a" if stdout_append else "w"  # Append if `>>`, overwrite if `>`
                 with open(output_file, mode) as f:
                     f.write(output_text)
