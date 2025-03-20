@@ -44,7 +44,7 @@ class LSCommand(BaseCommand):
             if filtered_args:
                 path = filtered_args[0]
 
-        if not self.validate_paths(path, output_file, stderr_file):
+        if not self.validate_paths(path, output_file):
             sys.exit(1)
 
         try:
