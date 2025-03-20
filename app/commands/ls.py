@@ -25,6 +25,14 @@ class LSCommand(BaseCommand):
             dir_args = [arg for arg in args[:split_index] if arg != "-1"]
             if dir_args:
                 path = dir_args[0]
+        
+        elif "2>" in args:
+            stderr_index = args.index("2>")
+            stderr_file = args[stderr_index + 1]
+
+            dir_args = [arg for arg in args[:stderr_index] if arg != "-1"]
+            if dir_args:
+                path = dir_args[0]
 
         else:
             filtered_args = [arg for arg in args if arg != "-1"]
