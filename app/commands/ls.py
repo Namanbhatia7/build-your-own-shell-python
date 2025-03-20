@@ -35,6 +35,7 @@ class LSCommand(BaseCommand):
         if output_file:
             output_dir = os.path.dirname(output_file)
             if output_dir and not os.path.exists(output_dir):
+                print('are we here?')
                 os.makedirs(output_dir)
             else:
                 print(f"ls: cannot access '{path}': No such file or directory", end="")
