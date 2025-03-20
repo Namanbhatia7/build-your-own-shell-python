@@ -33,12 +33,12 @@ class LSCommand(BaseCommand):
                 path = filtered_args[0]
 
         if output_file:
-            print(f"ls: writing output to '{output_file}'")
             output_dir = os.path.dirname(output_file)
             if output_dir and not os.path.exists(output_dir):
                 os.makedirs(output_dir)
             else:
                 print(f"ls: cannot access '{path}': No such file or directory", end="")
+                return
 
         try:
             contents = sorted(os.listdir(path))
