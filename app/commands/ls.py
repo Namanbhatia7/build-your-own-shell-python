@@ -54,24 +54,29 @@ class LSCommand(BaseCommand):
         Ensures the directory of `output_file` exists before writing.
         Ensures `path` exists before listing its contents.
         """
-        # # Check if the path to list exists
-        # if not os.path.exists(path):
-        #     print(f"ls: cannot access '{path}': No such file or directory", file=sys.stderr)
-        #     return False
 
         # Check if the directory for the output file exists (if redirection is used)
         if output_file:
-            print(output_file)
             output_dir = os.path.dirname(output_file)
-            if output_dir and not os.path.exists(output_dir):
+            
+            if not os.path.exists(output_dir):  # Ensure directory exists
                 try:
                     os.makedirs(output_dir, exist_ok=True)
-                    return False
                 except OSError:
-                    print(f'Failed to read file ("{output_file}"): open {output_file}: no such file or directory', file=sys.stderr)
+                    print(f'Failed to create directory: {output_dir}', file=sys.stderr)
                     return False
-            else:
-                print(f'Failed to read file ("{output_file}"): open {output_file}: no such file or directory', file=sys.stderr)
-                return False
+            
+            # Ensure output file exists before reading**
+            if not os.path.exists(output_file):
+                try:
+                    open(output_file, 'a').close()  # Create an empty file
+                except OSError:
+                    print(f'Failed to create file: {output_file}', file=sys.stderr)
+                    return False
+
+        # Check if the path to list exists
+        if not os.path.exists(path):
+            print(f"ls: cannot access '{path}': No such file or directory", file=sys.stderr)
+            return False
 
         return True
