@@ -46,7 +46,9 @@ class LSCommand(BaseCommand):
                 print(output_text.strip())  # Avoid extra newline
 
         except FileNotFoundError:
-            print(f"ls: {path}: No such file or directory", end="")
+            print(f"ls: {path}: No such file or directory", file=sys.stderr)
+            sys.exit(1)
+
 
     def validate_paths(self, path, output_file):
         """
