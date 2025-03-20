@@ -65,8 +65,10 @@ class LSCommand(BaseCommand):
         # Check if the directory for the output file exists (if redirection is used)
         if output_file:
             output_dir = os.path.dirname(output_file)
+            print(output_dir)
             if output_dir and not os.path.exists(output_dir):
                 try:
+                    print("Not here")
                     os.makedirs(output_dir, exist_ok=True)
                     return False
                 except OSError:
