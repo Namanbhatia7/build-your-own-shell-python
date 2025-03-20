@@ -61,6 +61,7 @@ class LSCommand(BaseCommand):
 
         # Check if the directory for the output file exists (if redirection is used)
         if output_file:
+            print(output_file)
             output_dir = os.path.dirname(output_file)
             if output_dir and not os.path.exists(output_dir):
                 try:
