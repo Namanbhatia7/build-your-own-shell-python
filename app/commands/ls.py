@@ -37,8 +37,8 @@ class LSCommand(BaseCommand):
             output_dir = os.path.dirname(output_file)
             if output_dir and not os.path.exists(output_dir):
                 os.makedirs(output_dir)
-        else:
-            print(f"ls: cannot access '{path}': No such file or directory", end="")
+            else:
+                print(f"ls: cannot access '{path}': No such file or directory", end="")
 
         try:
             contents = sorted(os.listdir(path))
