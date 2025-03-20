@@ -54,10 +54,10 @@ class LSCommand(BaseCommand):
         Ensures the directory of `output_file` exists before writing.
         Ensures `path` exists before listing its contents.
         """
-        # Check if the path to list exists
-        if not os.path.exists(path):
-            print(f"ls: cannot access '{path}': No such file or directory", file=sys.stderr)
-            return False
+        # # Check if the path to list exists
+        # if not os.path.exists(path):
+        #     print(f"ls: cannot access '{path}': No such file or directory", file=sys.stderr)
+        #     return False
 
         # Check if the directory for the output file exists (if redirection is used)
         if output_file:
@@ -66,7 +66,7 @@ class LSCommand(BaseCommand):
                 try:
                     os.makedirs(output_dir, exist_ok=True)
                 except OSError:
-                    print(f"Failed to create directory '{output_dir}': No such file or directory", file=sys.stderr)
+                    print(f'Failed to read file ("{output_file}"): open {output_file}: no such file or directory', file=sys.stderr)
                     return False
 
         return True
