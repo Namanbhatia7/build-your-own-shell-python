@@ -65,16 +65,15 @@ class LSCommand(BaseCommand):
         # Check if the directory for the output file exists (if redirection is used)
         if output_file:
             output_dir = os.path.dirname(output_file)
-            print(output_dir, os.path.exists(output_dir))
             if output_dir and not os.path.exists(output_dir):
                 try:
-                    print("Not here")
                     os.makedirs(output_dir, exist_ok=True)
                     return False
                 except OSError:
                     print(f'Failed to read file ("{output_file}"): open {output_file}: no such file or directory', file=sys.stderr)
                     return False
             else:
+                print(f'Failed to read file ("{output_file}"): open {output_file}: no such file or directory', file=sys.stderr)
                 return False
 
         return True
