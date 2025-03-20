@@ -74,9 +74,9 @@ class LSCommand(BaseCommand):
                     print(f'Failed to create file: {output_file}', file=sys.stderr)
                     return False
 
-        # Check if the path to list exists
-        if not os.path.exists(path):
-            print(f"ls: cannot access '{path}': No such file or directory", file=sys.stderr)
-            return False
+        # # Check if the path to list exists
+        # if not os.path.exists(path):
+        #     print(f"ls: cannot access '{path}': No such file or directory", file=sys.stderr)
+        #     return False
 
         return True
