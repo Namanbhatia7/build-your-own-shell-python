@@ -26,7 +26,7 @@ class LSCommand(BaseCommand):
             if dir_args:
                 path = dir_args[0]
         
-        elif "2>" in args:
+        elif "2>" in args or "2>>" in args:
             stderr_index = args.index("2>")
             stderr_file = args[stderr_index + 1]
 
