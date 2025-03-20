@@ -41,7 +41,6 @@ class LSCommand(BaseCommand):
         if filtered_args:
             path = filtered_args[0]
 
-        # Ensure parent directories exist for stdout & stderr files
         for file in [stdout_file, stderr_file]:
             if file:
                 output_dir = os.path.dirname(file)
@@ -60,6 +59,7 @@ class LSCommand(BaseCommand):
                 mode = "a" if stdout_append else "w"
                 with open(stdout_file, mode) as f:
                     f.write(output_text)
+                    f.flush()  # Ensure immediate write
             else:
                 print(output_text.strip())  # Print to stdout if no redirection
 
@@ -70,7 +70,8 @@ class LSCommand(BaseCommand):
                 mode = "a" if stderr_append else "w"
                 with open(stderr_file, mode) as f:
                     f.write(error_message)
+                    f.flush()  # Ensure immediate write
             else:
                 print(error_message.strip(), file=sys.stderr)  # Print to stderr
 
-            sys.exit(1)  # Ensure it exits with an error status
+            sys.exit(1)
