@@ -35,10 +35,7 @@ class LSCommand(BaseCommand):
         if output_file:
             output_dir = os.path.dirname(output_file)
             if output_dir and not os.path.exists(output_dir):
-                # Expected error format
-                error_message = f'Failed to read file ("{output_file}"): open {output_file}: no such file or directory\n'
-                print(error_message, end="")
-                return
+                os.makedirs(output_dir)
 
         try:
             contents = sorted(os.listdir(path))
