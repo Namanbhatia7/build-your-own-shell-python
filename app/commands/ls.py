@@ -32,7 +32,10 @@ class LSCommand(BaseCommand):
                 path = filtered_args[0]
 
         if not self.validate_paths(path, output_file):
+            print("validated?")
             sys.exit(1)
+        else:
+            print("not validatec")
 
         try:
             contents = sorted(os.listdir(path))
