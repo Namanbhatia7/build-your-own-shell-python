@@ -34,21 +34,27 @@ class LSCommand(BaseCommand):
 
         if output_file:
             output_dir = os.path.dirname(output_file)
+            print(output_dir)
+
             if output_dir and not os.path.exists(output_dir):
-                print('are we here?')
-                os.makedirs(output_dir)
-            else:
-                print(f'Failed to read file ("{output_file}"): open {output_file}: no such file or directory')
-                return
+                try:
+                    os.makedirs(output_dir, exist_ok=True)  # Ensure parent directories exist
+                except OSError:
+                    print(f'Failed to create directory for "{output_file}": No such file or directory')
+                    return
 
         try:
             contents = sorted(os.listdir(path))
             output_text = "\n".join(contents) + "\n"
 
             if output_file:
-                mode = "a" if stdout_append else "w"
-                with open(output_file, mode) as f:
-                    f.write(output_text)
+                try:
+                    mode = "a" if stdout_append else "w"
+                    with open(output_file, mode) as f:
+                        f.write(output_text)
+                except OSError:
+                    print(f'Failed to write to file ("{output_file}"): No such file or directory')
+                    return
             else:
                 print(output_text.strip())  # Avoid extra newline
 
