@@ -38,7 +38,7 @@ class LSCommand(BaseCommand):
                 print('are we here?')
                 os.makedirs(output_dir)
             else:
-                print(f"ls: cannot access '{path}': No such file or directory", end="")
+                print(f'Failed to read file ("{output_file}"): open {output_file}: no such file or directory')
                 return
 
         try:
