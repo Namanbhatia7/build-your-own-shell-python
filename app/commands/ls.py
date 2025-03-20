@@ -41,13 +41,13 @@ class LSCommand(BaseCommand):
         if filtered_args:
             path = filtered_args[0]
 
-        # Ensure directories exist for stdout and stderr files
+        # Ensure parent directories exist for stdout & stderr files
         for file in [stdout_file, stderr_file]:
             if file:
                 output_dir = os.path.dirname(file)
                 if output_dir and not os.path.exists(output_dir):
                     try:
-                        os.makedirs(output_dir, exist_ok=True)
+                        os.makedirs(output_dir, exist_ok=True)  # Create parent directories
                     except OSError:
                         print(f'Failed to create directory for "{file}": No such file or directory', file=sys.stderr)
                         sys.exit(1)
@@ -63,7 +63,7 @@ class LSCommand(BaseCommand):
             else:
                 print(output_text.strip())  # Print to stdout if no redirection
 
-        except FileNotFoundError as e:
+        except FileNotFoundError:
             error_message = f"ls: {path}: No such file or directory\n"
 
             if stderr_file:
