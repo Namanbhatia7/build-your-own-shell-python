@@ -38,12 +38,9 @@ class EchoCommand(BaseCommand):
         redirections, content = self.parse_arguments(args)
         content_str = " ".join(content)
 
-        if redirections["2>"]:
-            print('BAALLAAEEE', redirections)
+        if redirections["2>>"]:
             print(content_str, file=sys.stderr)
             sys.exit(1)
-        
-        print(redirections, "ad")
             
 
         # Print only if no stdout redirection
