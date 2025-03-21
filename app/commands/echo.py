@@ -42,6 +42,8 @@ class EchoCommand(BaseCommand):
             print('BAALLAAEEE', redirections)
             print(content_str, file=sys.stderr)
             sys.exit(1)
+        
+        print(redirections, "ad")
             
 
         # Print only if no stdout redirection
