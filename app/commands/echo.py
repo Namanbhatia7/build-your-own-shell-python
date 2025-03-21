@@ -39,6 +39,7 @@ class EchoCommand(BaseCommand):
         content_str = " ".join(content)
 
         if redirections["2>"]:
+            print('BAALLAAEEE', redirections)
             print(content_str, file=sys.stderr)
             sys.exit(1)
             
