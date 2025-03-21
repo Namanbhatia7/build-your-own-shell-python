@@ -13,9 +13,6 @@ class EchoCommand(BaseCommand):
 
         if redirections[">>"] or redirections["1>>"]:
             self.write_to_file(redirections[">>"] or redirections["1>>"], content_str, mode="a")
-        
-        if redirections["2>>"]:
-            self.write_to_file(redirections["2>>"], content_str, mode="a")
 
         if redirections["2>"]:
             self.write_to_file(redirections["2>"] or redirections["2>>"], "", mode="w", empty_ok=True)
@@ -39,8 +36,7 @@ class EchoCommand(BaseCommand):
         content_str = " ".join(content)
 
         if redirections["2>>"]:
-            print(content_str, file=sys.stderr)
-            sys.exit(1)
+            print(content_str, file=sys.stderr)            
             
 
         # Print only if no stdout redirection
