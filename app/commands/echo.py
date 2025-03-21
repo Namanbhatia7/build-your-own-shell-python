@@ -5,7 +5,7 @@ from app.commands.base import BaseCommand
 class EchoCommand(BaseCommand):
 
     def has_stdout_redirection(self, redirections):
-        return any(redirections[symbol] for symbol in self.REDIRECT_SYMBOLS if symbol != "2>")
+        return any(redirections[symbol] for symbol in self.REDIRECT_SYMBOLS if (symbol != "2>" or symbol != "2>>"))
 
     def handle_redirections(self, redirections, content_str):
         if redirections[">"] or redirections["1>"]:
@@ -15,7 +15,10 @@ class EchoCommand(BaseCommand):
             self.write_to_file(redirections[">>"] or redirections["1>>"], content_str, mode="a")
 
         if redirections["2>"]:
-            self.write_to_file(redirections["2>"] or redirections["2>>"], "", mode="w", empty_ok=True)
+            self.write_to_file(redirections["2>"], "", mode="w", empty_ok=True)
+
+        if redirections["2>>"]:
+            self.write_to_file(redirections["2>>"], content_str, mode="a", stderr=True)
 
     def parse_arguments(self, args):
         """Parses command arguments and returns a tuple of content and redirections."""
@@ -28,16 +31,12 @@ class EchoCommand(BaseCommand):
                 break
             else:
                 content.append(arg)
-        
+
         return redirections, content
 
     def redirect(self, args):
         redirections, content = self.parse_arguments(args)
         content_str = " ".join(content)
-
-        if redirections["2>>"]:
-            print(content_str, file=sys.stderr)            
-            
 
         # Print only if no stdout redirection
         if not self.has_stdout_redirection(redirections):
@@ -45,12 +44,15 @@ class EchoCommand(BaseCommand):
 
         self.handle_redirections(redirections, content_str)
 
-    def write_to_file(self, file_path, content, mode="w", empty_ok=False):
+    def write_to_file(self, file_path, content, mode="w", empty_ok=False, stderr=False):
         """Writes content to a file, ensuring parent directories exist."""
         if content or empty_ok:
             with open(file_path, mode) as f:
-                f.write(content + ("\n" if content else ""))
-    
+                f.write(content + "\n")
+
+        if stderr:
+            print(content, file=sys.stderr)
+
     def execute(self, args):
         if any(symbol in args for symbol in self.REDIRECT_SYMBOLS):
             self.redirect(args)
