@@ -4,7 +4,7 @@ from app.commands.base import BaseCommand
 class EchoCommand(BaseCommand):
 
     def has_stdout_redirection(self, redirections):
-        return any(redirections[symbol] for symbol in self.REDIRECT_SYMBOLS if symbol != "2>")
+        return any(redirections[symbol] for symbol in self.REDIRECT_SYMBOLS if symbol != "2>" or symbol != "2>>")
     
     def handle_redirections(self, redirections, content_str):
         if redirections[">"] or redirections["1>"]:
@@ -13,8 +13,8 @@ class EchoCommand(BaseCommand):
         if redirections[">>"] or redirections["1>>"]:
             self.write_to_file(redirections[">>"] or redirections["1>>"], content_str, mode="a")
 
-        if redirections["2>"]:
-            self.write_to_file(redirections["2>"], "", mode="w", empty_ok=True)
+        if redirections["2>"] or redirections["2>>"]:
+            self.write_to_file(redirections["2>"] or redirections["2>>"], "", mode="w", empty_ok=True)
 
     def parse_arguments(self, args):
         """Parses command arguments and returns a tuple of content and redirections."""
