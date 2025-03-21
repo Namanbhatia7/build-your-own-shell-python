@@ -1,4 +1,5 @@
 import shlex
+import sys
 from app.commands.base import BaseCommand
 
 class EchoCommand(BaseCommand):
@@ -36,6 +37,11 @@ class EchoCommand(BaseCommand):
     def redirect(self, args):
         redirections, content = self.parse_arguments(args)
         content_str = " ".join(content)
+
+        if redirections["2>"]:
+            print(content_str, file=sys.stderr)
+            sys.exit(1)
+            
 
         # Print only if no stdout redirection
         if not self.has_stdout_redirection(redirections):
