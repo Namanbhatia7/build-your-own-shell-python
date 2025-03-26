@@ -15,7 +15,8 @@ class Shell:
     
     def tab_completer(self):
         readline.parse_and_bind("tab: complete")
-        readline.set_completer(self.completer)
+        print(readline.set_completer(self.completer))
+
     
     def completer(self, text, state):
         matches = [cmd + " " for cmd in BUILT_IN_COMMANDS if cmd.startswith(text)]
