@@ -18,7 +18,7 @@ class Shell:
         readline.set_completer(self.completer)
     
     def completer(self, text, state):
-        matches = [cmd for cmd in BUILT_IN_COMMANDS if cmd.startswith(text)]
+        matches = [cmd + " " for cmd in BUILT_IN_COMMANDS if cmd.startswith(text)]
         return matches[state] if state < len(matches) else None
 
 
