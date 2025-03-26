@@ -1,0 +1,1 @@
+BUILT_IN_COMMANDS = ["echo", "exit", "type", "pwd", "cd"]
