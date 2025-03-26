@@ -15,7 +15,7 @@ class Shell:
     
     def tab_completer(self):
         readline.parse_and_bind("tab: complete")
-        print(readline.set_completer(self.completer))
+        readline.set_completer(self.completer)
 
     
     def completer(self, text, state):
