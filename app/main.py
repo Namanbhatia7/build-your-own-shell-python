@@ -19,6 +19,7 @@ class Shell:
 
     
     def completer(self, text, state):
+        """Auto-completes commands based on user input and adds a space after completion."""
         matches = [cmd + " " for cmd in BUILT_IN_COMMANDS if cmd.startswith(text)]
         return matches[state] if state < len(matches) else None
 
