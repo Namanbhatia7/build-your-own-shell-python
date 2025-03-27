@@ -14,6 +14,7 @@ class Shell:
         self.tab_completer()
     
     def tab_completer(self):
+        """Sets up tab completion for built-in commands."""
         readline.parse_and_bind("tab: complete")
         readline.set_completer(self.completer)
 
