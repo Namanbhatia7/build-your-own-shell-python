@@ -23,6 +23,8 @@ class Shell:
         executables = set()
         paths = os.environ.get("PATH", "").split(os.pathsep)
 
+        print(f"Searching for executables in: {paths}")
+
         for path in paths:
             if os.path.isdir(path):
                 try:
