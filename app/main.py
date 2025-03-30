@@ -1,6 +1,6 @@
-from os import read
 import sys
 import readline
+import os
 from app.service.command_handler import CommandHandler
 from app.service.history_manager import HistoryManager
 from app.utils.constants import BUILT_IN_COMMANDS
@@ -11,21 +11,38 @@ class Shell:
     def __init__(self):
         self.command_handler = CommandHandler()
         self.history_manager = HistoryManager()
-        self.tab_completer()
-    
-    def tab_completer(self):
-        """Sets up tab completion for built-in commands."""
+        self.setup_tab_completion()
+
+    def setup_tab_completion(self):
+        """Sets up tab completion for built-in and external commands."""
         readline.parse_and_bind("tab: complete")
         readline.set_completer(self.completer)
 
-    
+    def get_executables_in_path(self):
+        """Finds all executable files in directories listed in $PATH."""
+        paths = os.environ.get("PATH", "").split(os.pathsep)
+        executables = set()
+
+        for path in paths:
+            if os.path.isdir(path):
+                try:
+                    for file in os.listdir(path):
+                        file_path = os.path.join(path, file)
+                        if os.access(file_path, os.X_OK) and os.path.isfile(file_path):
+                            executables.add(file)
+                except PermissionError:
+                    continue  # Skip directories without read access
+
+        return executables
+
     def completer(self, text, state):
-        """Auto-completes commands based on user input and adds a space after completion."""
-        matches = [cmd + " " for cmd in BUILT_IN_COMMANDS if cmd.startswith(text)]
+        """Auto-completes commands from built-in commands and system executables."""
+        all_commands = BUILT_IN_COMMANDS.union(self.get_executables_in_path())
+        matches = [cmd + " " for cmd in all_commands if cmd.startswith(text)]
         return matches[state] if state < len(matches) else None
 
-
     def start(self):
+        """Starts the shell REPL loop."""
         while True:
             sys.stdout.write("$ ")
             sys.stdout.flush()
