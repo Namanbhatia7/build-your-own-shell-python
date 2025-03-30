@@ -20,27 +20,25 @@ class Shell:
 
     def get_executables_in_path(self):
         """Finds all executable files in directories listed in $PATH dynamically."""
-        executables = set()
-        paths = os.environ.get("PATH", "").split(os.pathsep)
-
-        print(f"Searching for executables in: {paths}")
-
+        PATH = os.environ["PATH"]
+        paths = PATH.split(":")
+        executable_commands = []
         for path in paths:
-            if os.path.isdir(path):
-                try:
-                    for file in os.listdir(path):
-                        file_path = os.path.join(path, file)
-                        if os.access(file_path, os.X_OK) and os.path.isfile(file_path):
-                            executables.add(file)
-                except PermissionError:
-                    continue  # Skip directories without read access
-
-        return executables
+            try:
+                for filename in os.listdir(path):
+                    fullpath = os.path.join(path, filename)
+                    if os.access(fullpath, os.X_OK):
+                        executable_commands.append(filename)
+            except FileNotFoundError:
+                pass
+        
+        return set(executable_commands)
 
     def completer(self, text, state):
         """Auto-completes commands from built-in commands and external executables."""
         all_commands = BUILT_IN_COMMANDS.union(self.get_executables_in_path())
         matches = [cmd + " " for cmd in all_commands if cmd.startswith(text)]
+
         return matches[state] if state < len(matches) else None
 
     def start(self):
