@@ -1,6 +1,6 @@
 import sys
-import readline
 import os
+import readline
 from app.service.command_handler import CommandHandler
 from app.service.history_manager import HistoryManager
 from app.utils.constants import BUILT_IN_COMMANDS
@@ -20,24 +20,27 @@ class Shell:
 
     def get_executables_in_path(self):
         """Finds all executable files in directories listed in $PATH dynamically."""
-        PATH = os.environ["PATH"]
-        paths = PATH.split(":")
-        executable_commands = []
+        executables = set()
+        paths = os.environ.get("PATH", "").split(os.pathsep)  # More robust PATH handling
+
         for path in paths:
-            try:
-                for filename in os.listdir(path):
-                    fullpath = os.path.join(path, filename)
-                    if os.access(fullpath, os.X_OK):
-                        executable_commands.append(filename)
-            except FileNotFoundError:
-                pass
+            if os.path.isdir(path):  # Ensure it's a directory
+                try:
+                    for file in os.listdir(path):
+                        file_path = os.path.join(path, file)
+                        if os.access(file_path, os.X_OK) and os.path.isfile(file_path):
+                            executables.add(file)
+                except PermissionError:
+                    continue  # Skip directories we cannot read
         
-        return set(executable_commands)
+        return executables
 
     def completer(self, text, state):
-        """Auto-completes commands from built-in commands and external executables."""
+        """Auto-completes commands for both built-in and external executables."""
         all_commands = BUILT_IN_COMMANDS.union(self.get_executables_in_path())
-        matches = [cmd + " " for cmd in all_commands if cmd.startswith(text)]
+
+        # Ensure that all command matches include a trailing space
+        matches = [cmd + " " for cmd in sorted(all_commands) if cmd.startswith(text)]
 
         return matches[state] if state < len(matches) else None
 
