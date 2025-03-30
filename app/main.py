@@ -32,17 +32,21 @@ class Shell:
                             executables.add(file)
                 except PermissionError:
                     continue  # Skip directories we cannot read
-        
+
+        print("Executables found in PATH:", executables)  # Debug print
         return executables
+
 
     def completer(self, text, state):
         """Auto-completes commands for both built-in and external executables."""
         all_commands = BUILT_IN_COMMANDS.union(self.get_executables_in_path())
 
-        # Ensure that all command matches include a trailing space
         matches = [cmd + " " for cmd in sorted(all_commands) if cmd.startswith(text)]
 
+        print(f"Matches for '{text}':", matches)  # Debug print
+
         return matches[state] if state < len(matches) else None
+
 
     def start(self):
         """Starts the shell REPL loop."""
