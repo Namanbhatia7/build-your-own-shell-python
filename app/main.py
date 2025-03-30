@@ -19,9 +19,9 @@ class Shell:
         readline.set_completer(self.completer)
 
     def get_executables_in_path(self):
-        """Finds all executable files in directories listed in $PATH."""
-        paths = os.environ.get("PATH", "").split(os.pathsep)
+        """Finds all executable files in directories listed in $PATH dynamically."""
         executables = set()
+        paths = os.environ.get("PATH", "").split(os.pathsep)
 
         for path in paths:
             if os.path.isdir(path):
@@ -36,7 +36,7 @@ class Shell:
         return executables
 
     def completer(self, text, state):
-        """Auto-completes commands from built-in commands and system executables."""
+        """Auto-completes commands from built-in commands and external executables."""
         all_commands = BUILT_IN_COMMANDS.union(self.get_executables_in_path())
         matches = [cmd + " " for cmd in all_commands if cmd.startswith(text)]
         return matches[state] if state < len(matches) else None
