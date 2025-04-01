@@ -24,14 +24,14 @@ class Shell:
         paths = os.environ.get("PATH", "").split(os.pathsep)  # More robust PATH handling
 
         for path in paths:
-            if os.path.isdir(path):  # Ensure it's a directory
+            if os.path.isdir(path):
                 try:
                     for file in os.listdir(path):
                         file_path = os.path.join(path, file)
                         if os.access(file_path, os.X_OK) and os.path.isfile(file_path):
                             executables.add(file)
                 except PermissionError:
-                    continue  # Skip directories we cannot read
+                    continue
 
         print("Executables found in PATH:", executables)  # Debug print
         return executables
